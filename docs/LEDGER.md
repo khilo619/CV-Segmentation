@@ -283,11 +283,49 @@ Naive concatenation allows ML models to cheat by checking internal PDF metadata:
 | **Engineer 2** | **Heuristics & Feature Engineering Lead** | • `src/cv_segment/heuristics/`<br>• `src/cv_segment/features/`<br>• `configs/heuristics.yaml`<br>• `notebooks/02_heuristics_tuning.ipynb` | 1. Header PII regex & international phone parser.<br>2. Dominant font size dominance ratio extractor.<br>3. Pagination parser ("Page X of Y", "Page 2").<br>4. Cross-page sentence & bullet continuation checker.<br>5. 36-dimensional tabular pairwise feature extractor. |
 | **Engineer 3** | **ML, Sequence Modeling & Data Lead** | • `scripts/download_datasets.py`<br>• `scripts/generate_synthetic.py`<br>• `src/cv_segment/models/`<br>• `configs/lightgbm_params.yaml`<br>• `configs/hmm_priors.yaml` | 1. Dataset scraper & anti-leakage synthetic stream generator.<br>2. Training LightGBM pairwise classifier with Optuna.<br>3. SHAP feature importance analysis and model serialization.<br>4. Viterbi HMM sequence optimizer enforcing CV length priors. |
 
-### 6.2 Feature Branches
-* `main`: Always protected and deployable.
-* Engineer 1: `feat/eng1-ingestion-slicer-cicd`
-* Engineer 2: `feat/eng2-heuristics-features`
-* Engineer 3: `feat/eng3-synthetic-lightgbm-viterbi`
+### 6.2 Git Branching Topology & Collaboration Protocol
+The repository strictly adopts **Trunk-Based Development with Short-Lived Feature Branches**:
+
+```
+main (protected) ───────────●───────────────────────────●──────────────────► (Tagged v1.0.0 -> GHCR)
+                             ▲                           ▲
+                             │ PR #1 (CI green)          │ PR #2 (CI green)
+                             │                           │
+feat/eng1-ingestion-slicer ──┘                           │
+                                                         │
+feat/eng2-heuristics-features ───────────────────────────┘
+```
+
+### 6.3 Core Feature Branches & Responsibilities
+1. **`main` (Protected Production Trunk):**
+   - Always in a clean, deployable state.
+   - Direct pushes are blocked via GitHub branch protection rules.
+   - Pushes and tags automatically trigger the multi-stage Docker build to GHCR (`:latest`).
+2. **`feat/eng1-ingestion-slicer-cicd` (Assigned to Engineer 1):**
+   - CI/CD GitHub Actions (`ci.yml`, `docker-publish.yml`).
+   - PyMuPDF ingestion parser & conditional OCR triage.
+   - pikepdf zero-copy lossless slicing engine.
+   - FastAPI microservice & CLI orchestrator.
+3. **`feat/eng2-heuristics-features` (Assigned to Engineer 2):**
+   - Deterministic rule engine (PII header density, font dominance, pagination, sentence fracture).
+   - 36-dimensional tabular pairwise feature vector extractor.
+   - Heuristic fast-path short-circuit gating ($P \ge 0.98$ and $P \le 0.02$).
+4. **`feat/eng3-synthetic-lightgbm-viterbi` (Assigned to Engineer 3):**
+   - Dataset acquisition (`download_datasets.py`) & anti-leakage synthetic stream generator.
+   - LightGBM pairwise classifier training, Optuna hyperparameter tuning, and SHAP analysis.
+   - Viterbi HMM global sequence optimizer enforcing CV length distributions.
+
+### 6.4 Pull Request (PR) Policy & Ephemeral Docker Preview
+1. **Quality Gates Required to Merge:**
+   - Automated Linter (`ruff check .`) and Formatter (`ruff format --check .`) pass with 0 errors.
+   - Strict static type analysis (`mypy src/`) passes with 0 issues.
+   - Test suite passes with coverage $\ge 70\%$ (`pytest tests/`).
+   - At least 1 peer approval from another engineer.
+   - Merges must use **Squash and Merge** to maintain a linear git history on `main`.
+2. **Branch-Specific Ephemeral Docker Images:**
+   - Pull Requests automatically trigger the Docker workflow with a PR-specific tag:
+     `ghcr.io/khilo619/cv-segmentation:pr-<pr_number>`
+   - This allows any reviewer to pull and test that exact branch in isolation without polluting `:latest`.
 
 ---
 
