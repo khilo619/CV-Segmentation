@@ -1,6 +1,7 @@
 """Shared test fixtures for unit and integration testing."""
 
 import pytest
+
 from cv_segment.schemas import PagePayload, TextSpan
 
 

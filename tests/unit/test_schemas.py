@@ -1,7 +1,6 @@
 """Unit tests for data schemas and dataclass models."""
 
 from cv_segment.schemas import (
-    BoundaryDecision,
     CandidateSegment,
     PagePayload,
     SegmentationManifest,

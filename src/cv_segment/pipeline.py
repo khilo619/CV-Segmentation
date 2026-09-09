@@ -14,7 +14,7 @@ from cv_segment.heuristics.engine import HeuristicGatingEngine
 from cv_segment.ingestion.parser import PDFStreamParser
 from cv_segment.models.classifier import LightGBMPairwiseClassifier
 from cv_segment.models.sequence_opt import ViterbiSequenceOptimizer
-from cv_segment.schemas import BoundaryDecision, CandidateSegment, SegmentationManifest
+from cv_segment.schemas import CandidateSegment, SegmentationManifest
 from cv_segment.slicer.pdf_slicer import PikePDFSlicer
 
 
@@ -49,7 +49,7 @@ class SegmentationPipeline:
         if total_pages <= 1:
             # Single-page PDF has no internal boundaries
             elapsed_ms = (time.perf_counter() - start_time) * 1000.0
-            segments = [
+            initial_segments = [
                 CandidateSegment(
                     candidate_id="candidate_001",
                     start_page=1,
@@ -63,7 +63,7 @@ class SegmentationPipeline:
                 total_pages=total_pages,
                 total_candidates=1,
                 boundaries=[],
-                segments=segments,
+                segments=initial_segments,
                 processing_time_ms=elapsed_ms,
             )
 

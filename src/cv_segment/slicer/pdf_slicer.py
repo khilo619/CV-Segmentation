@@ -4,12 +4,12 @@ Assigned Engineer: Engineer 1 (User)
 """
 
 from pathlib import Path
-from typing import List, Union
+from typing import Union
 
 try:
     import pikepdf
 except ImportError:
-    pikepdf = None
+    pikepdf = None  # type: ignore[assignment]
 
 from cv_segment.schemas import CandidateSegment
 
@@ -47,7 +47,7 @@ class PikePDFSlicer:
 
         with pikepdf.Pdf.open(str(source_path)) as src:
             total_pages = len(src.pages)
-            cut_points = sorted(list(set(boundary_cut_points)))
+            cut_points = sorted(set(boundary_cut_points))
 
             # Build list of (start_page_1idx, end_page_1idx) intervals
             intervals: list[tuple[int, int]] = []

@@ -3,8 +3,6 @@
 Assigned Engineer: Engineer 2 & Engineer 3
 """
 
-import math
-from typing import Dict, List
 from cv_segment.heuristics.font_rules import FontHierarchyExtractor
 from cv_segment.heuristics.pagination import PaginationExtractor
 from cv_segment.heuristics.pii_rules import PIIRuleExtractor
@@ -95,9 +93,7 @@ class PairwiseFeatureExtractor:
             "terminal_section_score_p1": (
                 1.0 if "references" in page_i.text.lower()[-300:] else 0.0
             ),
-            "front_section_score_p2": (
-                1.0 if "summary" in page_j.text.lower()[:300] else 0.0
-            ),
+            "front_section_score_p2": (1.0 if "summary" in page_j.text.lower()[:300] else 0.0),
             "cumulative_page_count": float(cumulative_pages_in_segment),
             "pagination_gap_flag": 0.0,
             "exact_page_increment_flag": exact_inc,

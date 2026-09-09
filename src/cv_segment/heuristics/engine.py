@@ -3,8 +3,8 @@
 Assigned Engineer: Engineer 2
 """
 
-from typing import List
 from cv_segment.schemas import HeuristicEvaluation, PagePayload
+
 from .font_rules import FontHierarchyExtractor
 from .pagination import PaginationExtractor
 from .pii_rules import PIIRuleExtractor

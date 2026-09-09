@@ -4,7 +4,8 @@ Assigned Engineer: Engineer 3
 """
 
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
+
 import numpy as np
 
 
@@ -21,6 +22,7 @@ class LightGBMPairwiseClassifier:
         """Loads serialized LightGBM booster."""
         try:
             import lightgbm as lgb
+
             self.model = lgb.Booster(model_file=str(path))
         except Exception:
             self.model = None

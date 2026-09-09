@@ -4,9 +4,9 @@ Assigned Engineer: Engineer 2
 """
 
 import re
-from typing import Optional, Tuple
-from cv_segment.schemas import PagePayload
+from typing import Optional
 
+from cv_segment.schemas import PagePayload
 
 PAGE_X_OF_Y_REGEX = re.compile(r"(?i)page\s*(\d+)\s*(?:of|/)\s*(\d+)")
 SOLITARY_NUM_REGEX = re.compile(r"(?i)^\s*[-–—]?\s*(\d+)\s*[-–—]?\s*$")
@@ -24,9 +24,7 @@ class PaginationExtractor:
         footer_limit = page.height * (1.0 - self.margin_ratio)
 
         margin_spans = [
-            s.text
-            for s in page.spans
-            if s.bbox[1] <= header_limit or s.bbox[3] >= footer_limit
+            s.text for s in page.spans if s.bbox[1] <= header_limit or s.bbox[3] >= footer_limit
         ]
         margin_text = " \n ".join(margin_spans)
 

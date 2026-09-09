@@ -5,7 +5,6 @@ Assigned Engineer: Engineer 3
 """
 
 import argparse
-import json
 import sys
 from pathlib import Path
 

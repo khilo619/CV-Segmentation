@@ -3,7 +3,6 @@
 Assigned Engineer: Engineer 3 & Engineer 1
 """
 
-from typing import List, Tuple
 import numpy as np
 
 

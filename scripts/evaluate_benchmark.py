@@ -10,9 +10,7 @@ import sys
 from pathlib import Path
 
 
-def calculate_metrics(
-    ground_truth: list[int], predictions: list[int]
-) -> dict[str, float]:
+def calculate_metrics(ground_truth: list[int], predictions: list[int]) -> dict[str, float]:
     gt_set = set(ground_truth)
     pred_set = set(predictions)
 
@@ -22,11 +20,7 @@ def calculate_metrics(
 
     precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
     recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
-    f1 = (
-        2 * precision * recall / (precision + recall)
-        if (precision + recall) > 0
-        else 0.0
-    )
+    f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0.0
 
     return {
         "true_positives": tp,

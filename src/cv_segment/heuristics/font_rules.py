@@ -4,6 +4,7 @@ Assigned Engineer: Engineer 2
 """
 
 import statistics
+
 from cv_segment.schemas import PagePayload
 
 
@@ -24,9 +25,7 @@ class FontHierarchyExtractor:
             median_size = 10.0
 
         header_y_max = page.height * self.header_ratio
-        header_fonts = [
-            s.font_size for s in page.spans if s.bbox[1] <= header_y_max
-        ]
+        header_fonts = [s.font_size for s in page.spans if s.bbox[1] <= header_y_max]
 
         max_header_font = max(header_fonts) if header_fonts else median_size
         return float(max_header_font / median_size)

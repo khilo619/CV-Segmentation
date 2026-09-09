@@ -4,12 +4,12 @@ Assigned Engineer: Engineer 1 (User)
 """
 
 from pathlib import Path
-from typing import List, Union
+from typing import Union
 
 try:
     import fitz  # PyMuPDF
 except ImportError:
-    fitz = None
+    fitz = None  # type: ignore[assignment]
 
 from cv_segment.schemas import PagePayload, TextSpan
 
@@ -27,9 +27,7 @@ class PDFStreamParser:
             raise FileNotFoundError(f"PDF file not found: {pdf_path}")
 
         if fitz is None:
-            raise RuntimeError(
-                "PyMuPDF is not installed. Install via `pip install PyMuPDF`."
-            )
+            raise RuntimeError("PyMuPDF is not installed. Install via `pip install PyMuPDF`.")
 
         doc = fitz.open(str(path_obj))
         pages: list[PagePayload] = []

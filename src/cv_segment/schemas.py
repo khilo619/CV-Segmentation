@@ -1,7 +1,7 @@
 """Data schemas and internal communication contracts for the CV segmentation engine."""
 
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import Optional
 
 
 @dataclass

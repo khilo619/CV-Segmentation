@@ -1,8 +1,9 @@
 """Integration tests for the End-to-End Segmentation Pipeline."""
 
 from unittest.mock import MagicMock, patch
+
 from cv_segment.pipeline import SegmentationPipeline
-from cv_segment.schemas import CandidateSegment, PagePayload, TextSpan
+from cv_segment.schemas import PagePayload, TextSpan
 
 
 def test_pipeline_single_page_stream() -> None:
