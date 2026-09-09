@@ -9,9 +9,9 @@ High-throughput, automated boundary detection and zero-copy lossless splitting e
 
 ---
 
-## Master Architecture & Engineering Ledger
-For the complete technical specification, mathematical formulations, hardware benchmarks, and team task distributions, read:
-👉 **[LEDGER.md](LEDGER.md)**
+## Master Documentation & Backlog
+* 📋 **Master Architecture Ledger:** 👉 **[docs/LEDGER.md](docs/LEDGER.md)**
+* 🗂️ **Agile Engineering Backlog:** 👉 **[docs/PROJECT_BACKLOG.md](docs/PROJECT_BACKLOG.md)**
 
 ---
 
@@ -67,9 +67,12 @@ cv-stream-segmenter/
 │   ├── heuristics.yaml            # Rule thresholds and regex patterns
 │   ├── lightgbm_params.yaml       # Hyperparameters & feature list
 │   └── hmm_priors.yaml            # Transition probabilities
-├── docker/
-│   ├── Dockerfile                 # Multi-stage production build (CPU-optimized)
-│   └── .dockerignore
+├── docs/
+│   ├── LEDGER.md                  # Master technical & scientific specification
+│   ├── PROJECT_BACKLOG.md         # Agile Scrum Epics, Stories & Story Points
+│   └── PROJECT_BACKLOG.tex        # LaTeX source for formal PDF export
+├── Dockerfile                     # Multi-stage production build (CPU-optimized)
+├── .dockerignore                  # Docker build context filters
 ├── notebooks/                     # Exploratory research & visualization
 │   ├── 01_data_synthesis_check.ipynb
 │   ├── 02_heuristics_tuning.ipynb

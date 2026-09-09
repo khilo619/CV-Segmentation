@@ -1,0 +1,372 @@
+\documentclass[11pt,a4paper]{article}
+
+% ==============================================================================
+% Packages & Layout Settings
+% ==============================================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in,headheight=14pt]{geometry}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{tcolorbox}
+\usepackage[colorlinks=true,linkcolor=NavyBlue,urlcolor=NavyBlue,citecolor=NavyBlue]{hyperref}
+
+% ==============================================================================
+% Color Palette
+% ==============================================================================
+\definecolor{NavyBlue}{RGB}{26, 54, 93}
+\definecolor{SlateGray}{RGB}{74, 85, 104}
+\definecolor{LightGray}{RGB}{247, 250, 252}
+\definecolor{BorderGray}{RGB}{226, 232, 240}
+\definecolor{AccentBlue}{RGB}{43, 108, 176}
+\definecolor{SuccessGreen}{RGB}{47, 133, 90}
+
+% ==============================================================================
+% Typography & Header Styling
+% ==============================================================================
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{NavyBlue}}{\thesection}{1em}{}[\titlerule]
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{AccentBlue}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\normalsize\bfseries\color{SlateGray}}{\thesubsubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\color{SlateGray}\small CV Stream Segmentation Engine --- Project Backlog}
+\rhead{\color{SlateGray}\small Version 1.0}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+
+% Custom Box for Stories
+\newtcolorbox{storybox}[2][]{
+  colback=LightGray,
+  colframe=BorderGray,
+  coltitle=NavyBlue,
+  fonttitle=\bfseries,
+  title={#2},
+  boxrule=0.8pt,
+  arc=3pt,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt,
+  #1
+}
+
+% ==============================================================================
+% Document Body
+% ==============================================================================
+\begin{document}
+
+% Title Header
+\begin{center}
+    {\Huge \textbf{\color{NavyBlue} Project Engineering Backlog}}\\[6pt]
+    {\Large \textbf{\color{SlateGray} Automated CV Stream Segmentation \& Lossless Splitting Engine}}\\[10pt]
+    \rule{\linewidth}{1pt}\\[6pt]
+    \textbf{Target Release:} Version 1.0 (CPU-Only Modular Monolith) \quad $|$ \quad
+    \textbf{Framework:} Agile / Scrum (5 Sprints) \quad $|$ \quad
+    \textbf{Team Size:} 3 Engineers\\[4pt]
+    \textbf{Date:} September 2026 \quad $|$ \quad \textbf{Classification:} Internal Engineering Master Spec
+\end{center}
+
+\vspace{1em}
+
+\section{Executive Summary \& Problem Definition}
+
+\subsection{Business Context to Technical Translation}
+Enterprise Applicant Tracking Systems (ATS) including Workday, Greenhouse, Taleo, and Bullhorn routinely merge hundreds of multi-page candidate resumes into a single monolithic PDF (typically 200 to 1,000 pages). Feeding these unsegmented bulk files directly into downstream automated parsers generates catastrophic \textbf{"PII chimeras"} (fabricating hybrid identities by merging distinct candidates) and triggers memory exhaustion or payload timeouts. 
+
+This engineering backlog defines the complete, prioritized roadmap for building an automated, high-throughput, on-premise engine to detect candidate transitions and perform zero-copy lossless slicing.
+
+\subsection{Definition of Ready (DoR) \& Definition of Done (DoD)}
+\begin{itemize}[leftmargin=1.5em, itemsep=2pt]
+    \item \textbf{Definition of Ready (DoR):} User story includes clear business justification, testable technical acceptance criteria, architectural tier mapping, story points (Fibonacci), and assigned engineer ownership.
+    \item \textbf{Definition of Done (DoD):} Implemented with full Python 3.11 static typing (\texttt{mypy src/ --strict}), covered by unit and integration tests (\texttt{pytest}), code coverage $\ge 70\%$ (progressing to $\ge 85\%$), verified with \texttt{ruff}, peer reviewed, and merged into \texttt{main}.
+\end{itemize}
+
+\vspace{0.5em}
+
+\section{Epics Overview}
+
+\begin{table}[h!]
+\centering
+\small
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{lXlc}
+\toprule
+\textbf{Epic ID} & \textbf{Epic Name \& Architectural Domain} & \textbf{Lead Engineer} & \textbf{Total Points} \\
+\midrule
+\textbf{EPIC-1} & High-Throughput Digital Ingestion \& Conditional OCR Triage & Engineer 1 (DevOps/IO) & 6 \\
+\textbf{EPIC-2} & Data Strategy \& Anti-Leakage Synthetic Generation Pipeline & Engineer 3 (ML/Data) & 7 \\
+\textbf{EPIC-3} & Production Heuristic Gating Engine (Tier 1 Gating) & Engineer 2 (Features/Rules) & 11 \\
+\textbf{EPIC-4} & 36-Dimensional Feature Engineering \& LightGBM (Tier 2) & Engineer 2 \& 3 & 10 \\
+\textbf{EPIC-5} & Structured Sequence Modeling \& Viterbi Trellis (Tier 3) & Engineer 3 \& 1 & 6 \\
+\textbf{EPIC-6} & Zero-Copy Lossless Slicing \& Enterprise Delivery (API/Docker) & Engineer 1 (DevOps/IO) & 8 \\
+\midrule
+\textbf{Total} & \textbf{5 Sprints $\times$ 2 Weeks Implementation Cycle} & \textbf{Team of 3} & \textbf{48 Points} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\newpage
+
+\section{Detailed User Stories \& Acceptance Criteria}
+
+% ------------------------------------------------------------------------------
+\subsection{EPIC-1: High-Throughput Ingestion \& Conditional OCR}
+% ------------------------------------------------------------------------------
+
+\begin{storybox}{Story 1.1: Native PyMuPDF Digital Text \& Geometry Extraction (Points: 3 $|$ Priority: P0)}
+\textbf{As an} ML pipeline, \\
+\textbf{I want} structured text spans, bounding boxes, and font sizes extracted from digital PDFs in $<4\text{ ms}$ per page, \\
+\textbf{So that} downstream models receive rich layout geometry without paying rasterization or OCR latency penalties.
+
+\textbf{Technical Acceptance Criteria:}
+\begin{itemize}[leftmargin=1.2em, itemsep=1pt]
+    \item \texttt{PDFStreamParser.parse\_pdf()} returns an ordered sequence of \texttt{PagePayload} dataclasses.
+    \item Extracts text spans with $(x_0, y_0, x_1, y_1)$ baseline bounding boxes, font name, and font point size.
+    \item Correctly calculates printable character count and detects embedded image objects.
+    \item Handles missing files and corrupt streams with clean exceptions.
+\end{itemize}
+\textbf{Assignee:} Engineer 1 (Repo Manager / IO Lead)
+\end{storybox}
+
+\begin{storybox}{Story 1.2: Conditional OCR Triage Subsystem (Points: 3 $|$ Priority: P1)}
+\textbf{As a} system administrator, \\
+\textbf{I want} OCR to be triggered strictly on scanned or flatbed resume pages, \\
+\textbf{So that} processing digital PDFs remains under 15 milliseconds per page.
+
+\textbf{Technical Acceptance Criteria:}
+\begin{itemize}[leftmargin=1.2em, itemsep=1pt]
+    \item Evaluates printable character density threshold ($\text{chars} < 80$ AND has embedded raster image).
+    \item Bypasses OCR on born-digital pages ($\ge 95\%$ of standard recruitment streams).
+    \item Invokes \texttt{PaddleOCR} / \texttt{Tesseract} only on confirmed scanned pages to synthesize text spans.
+\end{itemize}
+\textbf{Assignee:} Engineer 1
+\end{storybox}
+
+% ------------------------------------------------------------------------------
+\subsection{EPIC-2: Data Strategy \& Anti-Leakage Synthetic Generation}
+% ------------------------------------------------------------------------------
+
+\begin{storybox}{Story 2.1: Open-Source Resume Corpus Ingestion (Points: 2 $|$ Priority: P0)}
+\textbf{As an} ML engineer, \\
+\textbf{I want} an automated fetcher for 3,000+ open-source resumes from Kaggle, Hugging Face, and GitHub, \\
+\textbf{So that} our training pool represents diverse corporate, technical, and creative templates.
+
+\textbf{Technical Acceptance Criteria:}
+\begin{itemize}[leftmargin=1.2em, itemsep=1pt]
+    \item Script \texttt{scripts/download\_datasets.py} downloads Kaggle and Hugging Face resume corpora.
+    \item Categorizes resumes by page length (1p, 2p, 3p, 4p+) and verified formatting integrity.
+\end{itemize}
+\textbf{Assignee:} Engineer 3 (ML / Data Lead)
+\end{storybox}
+
+\begin{storybox}{Story 2.2: Anti-Leakage Synthetic Stream Generator (Points: 5 $|$ Priority: P0)}
+\textbf{As an} ML engineer, \\
+\textbf{I want} programmatically concatenated multi-candidate PDF streams with ground-truth manifests, \\
+\textbf{So that} we obtain infinite labeled training data for free without annotator labor or PII leakage.
+
+\textbf{Technical Acceptance Criteria:}
+\begin{itemize}[leftmargin=1.2em, itemsep=1pt]
+    \item Generates multi-candidate streams of 20 to 200 pages with realistic length distribution: 45\% (1-page), 42\% (2-page), 10\% (3-page), 3\% (4+ page).
+    \item \textbf{Anti-Leakage Protocol:} Re-saves PDFs with unified cross-reference tables and completely strips \texttt{/CreationDate}, \texttt{/ModDate}, and \texttt{/Producer} metadata to prevent models from learning spurious shortcuts.
+    \item Applies stochastic scan emulation (200 DPI rasterization, $\pm 1.5^\circ$ tilt, Gaussian noise) to 15\% of streams.
+    \item Outputs paired \texttt{ground\_truth\_manifest.json} with verified boundary split points.
+\end{itemize}
+\textbf{Assignee:} Engineer 3
+\end{storybox}
+
+\newpage
+
+% ------------------------------------------------------------------------------
+\subsection{EPIC-3: Production Heuristic Gating Engine (Tier 1)}
+% ------------------------------------------------------------------------------
+
+\begin{storybox}{Story 3.1: Header PII Density Signal (Points: 3 $|$ Priority: P0)}
+\textbf{As a} boundary detector, \\
+\textbf{I want} to identify candidate contact credentials in page headers, \\
+\textbf{So that} new candidate start pages are recognized with high deterministic confidence.
+
+\textbf{Technical Acceptance Criteria:}
+\begin{itemize}[leftmargin=1.2em, itemsep=1pt]
+    \item Scans top 35\% vertical coordinate zone of each page for email, international phone, LinkedIn, and GitHub patterns.
+    \item Computes weighted score $S_{\text{PII}}$. When $S_{\text{PII}} \ge 3.0$ and preceding page has low PII, emits boundary probability $P \ge 0.98$.
+\end{itemize}
+\textbf{Assignee:} Engineer 2 (Heuristics \& Feature Lead)
+\end{storybox}
+
+\begin{storybox}{Story 3.2: Typography Hierarchy \& Dominance Ratio Analyzer (Points: 2 $|$ Priority: P1)}
+\textbf{As a} boundary detector, \\
+\textbf{I want} to measure font dominance ratios across page headers, \\
+\textbf{So that} large typographic name titles reliably indicate fresh candidate documents.
+
+\textbf{Technical Acceptance Criteria:}
+\begin{itemize}[leftmargin=1.2em, itemsep=1pt]
+    \item Computes Dominance Ratio $R_{\text{font}} = \max(\text{top } 25\%) / \text{median}(\text{all spans})$.
+    \item Flags transitions where $R_{\text{font}}(P_{i+1}) \ge 1.8$ and $R_{\text{font}}(P_i) < 1.3$ as candidate starts.
+\end{itemize}
+\textbf{Assignee:} Engineer 2
+\end{storybox}
+
+\begin{storybox}{Story 3.3: Explicit Header/Footer Pagination Tracking (Points: 3 $|$ Priority: P0)}
+\textbf{As a} boundary detector, \\
+\textbf{I want} to parse explicit pagination patterns in header and footer margins, \\
+\textbf{So that} explicit sequence markers provide deterministic ground-truth boundary decisions.
+
+\textbf{Technical Acceptance Criteria:}
+\begin{itemize}[leftmargin=1.2em, itemsep=1pt]
+    \item Matches \texttt{"Page X of Y"} and solitary margin numbers in top/bottom 10\% zones.
+    \item Emits boundary ($y_i = 1$) when next page is \texttt{"Page 1"} or current page is \texttt{"Page k of k"}.
+    \item Emits continuation ($y_i = 0$) when current is $k$ and next is $k+1$.
+\end{itemize}
+\textbf{Assignee:} Engineer 2
+\end{storybox}
+
+\begin{storybox}{Story 3.4: Cross-Page Syntactic Sentence Fracture Analyzer (Points: 3 $|$ Priority: P1)}
+\textbf{As a} boundary detector, \\
+\textbf{I want} to detect cross-page grammatical continuations, \\
+\textbf{So that} mid-sentence physical page splits are never erroneously broken into new candidates.
+
+\textbf{Technical Acceptance Criteria:}
+\begin{itemize}[leftmargin=1.2em, itemsep=1pt]
+    \item Detects trailing hyphens on $P_i$ followed by lowercase token on $P_{i+1}$ (continuation score $= 0.99$).
+    \item Detects non-terminal punctuation with trailing coordinating conjunctions (\texttt{and}, \texttt{with}, \texttt{or}, \texttt{to}) followed by lowercase text (continuation score $= 0.95$).
+    \item Short-circuits downstream ML when continuation certainty is high.
+\end{itemize}
+\textbf{Assignee:} Engineer 2
+\end{storybox}
+
+\newpage
+
+% ------------------------------------------------------------------------------
+\subsection{EPIC-4: 36-Dimensional Feature Engineering \& LightGBM (Tier 2)}
+% ------------------------------------------------------------------------------
+
+\begin{storybox}{Story 4.1: Pairwise Tabular Feature Extractor (Points: 5 $|$ Priority: P0)}
+\textbf{As an} ML classifier, \\
+\textbf{I need} a normalized 36-dimensional feature vector comparing adjacent pages $(P_i, P_{i+1})$, \\
+\textbf{So that} gradient boosted trees can resolve ambiguous layouts in 2 milliseconds on CPU.
+
+\textbf{Technical Acceptance Criteria:}
+\begin{itemize}[leftmargin=1.2em, itemsep=1pt]
+    \item \texttt{PairwiseFeatureExtractor.extract\_features()} produces a 36-feature dictionary spanning semantic, PII, typography, layout delta, syntactic, and lifecycle signals.
+    \item Handles empty text, single-column, and multi-column designs with zero exceptions.
+    \item Execution speed $<2\text{ ms}$ per page pair on standard CPU.
+\end{itemize}
+\textbf{Assignee:} Engineer 2 \& Engineer 3
+\end{storybox}
+
+\begin{storybox}{Story 4.2: LightGBM Pairwise Classifier Training \& Tuning (Points: 5 $|$ Priority: P0)}
+\textbf{As an} ML engineer, \\
+\textbf{I want} to train an optimized LightGBM binary classifier on 50,000 synthetic page transitions, \\
+\textbf{So that} ambiguous pairs are resolved with $>96\%$ boundary F1 score.
+
+\textbf{Technical Acceptance Criteria:}
+\begin{itemize}[leftmargin=1.2em, itemsep=1pt]
+    \item Trains GBDT booster using histogram binning and GOSS sampling.
+    \item Hyperparameter tuning via Optuna (\texttt{max\_depth=5}, \texttt{num\_leaves=31}, \texttt{n\_estimators=150}).
+    \item SHAP feature importance analysis to verify and prune redundant layout features.
+    \item Serializes model to \texttt{models/lightgbm\_pairwise.pkl}.
+\end{itemize}
+\textbf{Assignee:} Engineer 3
+\end{storybox}
+
+% ------------------------------------------------------------------------------
+\subsection{EPIC-5: Structured Sequence Modeling \& Viterbi Trellis (Tier 3)}
+% ------------------------------------------------------------------------------
+
+\begin{storybox}{Story 5.1: Hidden Markov Model Transition Priors (Points: 3 $|$ Priority: P0)}
+\textbf{As a} sequence optimizer, \\
+\textbf{I need} transition matrix $\mathbf{A}$ over states $\{\text{START}, \text{PAGE\_2}, \text{PAGE\_3}, \text{PAGE\_4+}\}$, \\
+\textbf{So that} impossible transitions are mathematically banned and CV length priors are enforced.
+
+\textbf{Technical Acceptance Criteria:}
+\begin{itemize}[leftmargin=1.2em, itemsep=1pt]
+    \item Implements empirical resume length transition matrix $\mathbf{A}$ derived from recruitment statistics.
+    \item Structurally enforces $P(\text{START} \to \text{PAGE\_3}) = 0.00$ and eliminates orphaned continuation pages.
+\end{itemize}
+\textbf{Assignee:} Engineer 3
+\end{storybox}
+
+\begin{storybox}{Story 5.2: Viterbi Trellis Dynamic Programming (Points: 3 $|$ Priority: P0)}
+\textbf{As a} pipeline orchestrator, \\
+\textbf{I want} forward log-space trellis induction and backtracking over the page sequence, \\
+\textbf{So that} local classifier probabilities are globally smoothed into valid candidate documents.
+
+\textbf{Technical Acceptance Criteria:}
+\begin{itemize}[leftmargin=1.2em, itemsep=1pt]
+    \item \texttt{ViterbiSequenceOptimizer.decode()} computes globally optimal path $\mathbf{S}^*$.
+    \item Decodes a 500-page document stream in $<1\text{ millisecond}$ on CPU.
+    \item Emits 1-indexed split cut points matching slicing engine requirements.
+\end{itemize}
+\textbf{Assignee:} Engineer 3 \& Engineer 1
+\end{storybox}
+
+\newpage
+
+% ------------------------------------------------------------------------------
+\subsection{EPIC-6: Zero-Copy Lossless Slicing \& Enterprise Delivery}
+% ------------------------------------------------------------------------------
+
+\begin{storybox}{Story 6.1: Lossless Zero-Copy PDF Slicing Engine (Points: 3 $|$ Priority: P0)}
+\textbf{As an} operations engineer, \\
+\textbf{I want} to slice bulk PDF streams into individual candidate PDFs without decompressing streams, \\
+\textbf{So that} vector graphics, embedded fonts, and digital attachments are 100\% preserved.
+
+\textbf{Technical Acceptance Criteria:}
+\begin{itemize}[leftmargin=1.2em, itemsep=1pt]
+    \item \texttt{PikePDFSlicer.slice\_stream()} performs pointer re-indexing on PDF cross-reference tables.
+    \item Slices a 500-page PDF into 200 files in $<400\text{ ms}$.
+    \item Emits \texttt{manifest.json} with candidate page intervals and processing metadata.
+\end{itemize}
+\textbf{Assignee:} Engineer 1
+\end{storybox}
+
+\begin{storybox}{Story 6.2: FastAPI Microservice \& Container Packaging (Points: 5 $|$ Priority: P0)}
+\textbf{As an} enterprise client, \\
+\textbf{I want} an HTTP API endpoint (\texttt{POST /v1/segment-stream}) and a multi-stage Docker container on GHCR, \\
+\textbf{So that} the engine deploys cleanly in cloud or on-premise Kubernetes environments.
+
+\textbf{Technical Acceptance Criteria:}
+\begin{itemize}[leftmargin=1.2em, itemsep=1pt]
+    \item FastAPI endpoint accepts multipart PDF stream uploads and returns segmentation manifest JSON.
+    \item Health probe (\texttt{GET /v1/health}) for Kubernetes container orchestration.
+    \item Multi-stage \texttt{Dockerfile} builds automatically in GitHub Actions and publishes to \texttt{ghcr.io}.
+    \item Container runs as non-root user \texttt{10001} with image size $<350\text{ MB}$.
+\end{itemize}
+\textbf{Assignee:} Engineer 1
+\end{storybox}
+
+\vspace{1em}
+
+\section{Sprint Execution Roadmap (5 Sprints)}
+
+\begin{table}[h!]
+\centering
+\small
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\textwidth}{lp{6cm}Xc}
+\toprule
+\textbf{Sprint} & \textbf{Core Focus Area} & \textbf{Key Deliverables} & \textbf{Velocity} \\
+\midrule
+\textbf{Sprint 1} & Scaffolding, Data \& Ingestion & CI/CD with GHCR, PyMuPDF parser, synthetic dataset fetcher \& anti-leakage generator & 16 pts \\
+\textbf{Sprint 2} & Heuristics \& Feature Pipeline & Tier 1 rules (PII, font, pagination, syntax), 36-feature vector extractor & 16 pts \\
+\textbf{Sprint 3} & Classical ML \& Sequence Trellis & LightGBM training on 50,000 pairs, Optuna tuning, Viterbi HMM decoder & 16 pts \\
+\textbf{Sprint 4} & Slicing \& Pipeline Assembly & pikepdf lossless slicing engine, master pipeline assembly, integration tests & 14 pts \\
+\textbf{Sprint 5} & Hardening, API \& Gold Standard Eval & FastAPI microservice, evaluation on 25 real enterprise ATS batches ($<15$ ms/pg) & 12 pts \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\end{document}
