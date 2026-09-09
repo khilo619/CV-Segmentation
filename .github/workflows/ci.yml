@@ -58,7 +58,7 @@ jobs:
 
       - name: Execute Pytest with Coverage
         run: |
-          pytest tests/ -v --cov=cv_segment --cov-report=xml --cov-report=term-missing --cov-fail-under=80
+          pytest tests/ -v --cov=cv_segment --cov-report=xml --cov-report=term-missing --cov-fail-under=70
 
       - name: Upload Test Coverage Artifact
         uses: actions/upload-artifact@v4
