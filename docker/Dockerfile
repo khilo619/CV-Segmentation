@@ -10,7 +10,6 @@ WORKDIR /build
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
-    libqpdf-dev \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --no-cache-dir uv
@@ -27,9 +26,9 @@ LABEL org.opencontainers.image.description="CV Stream Segmentation Engine"
 
 WORKDIR /app
 
-# Install runtime libraries only (libqpdf for pikepdf)
+# Install runtime libraries only (qpdf and tesseract-ocr)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libqpdf29 \
+    qpdf \
     tesseract-ocr \
     && rm -rf /var/lib/apt/lists/*
 
