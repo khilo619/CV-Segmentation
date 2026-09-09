@@ -38,17 +38,22 @@ $$\mathcal{D} = (P_1, P_2, \dots, P_N)$$
 The system computes a binary boundary indicator vector:
 $$\mathbf{Y} = [y_1, y_2, \dots, y_{N-1}] \in \{0, 1\}^{N-1}$$
 where:
-$$y_i = \begin{cases} 1 & \text{if a document boundary occurs between } P_i \text{ and } P_{i+1} \\ 0 & \text{if } P_{i+1} \text{ is an internal continuation of } P_i \end{cases}$$
+$$
+y_i = \begin{cases}
+1, & \text{if a document boundary occurs between } P_i \text{ and } P_{i+1} \\
+0, & \text{if } P_{i+1} \text{ is an internal continuation of } P_i
+\end{cases}
+$$
 
 Alternatively, every page $P_t$ maps to a structural hidden state:
-$$S_t \in \{\text{START}, \text{PAGE\_2}, \text{PAGE\_3}, \text{PAGE\_4+}\}$$
+$$S_t \in \{\text{START}, \text{PAGE-2}, \text{PAGE-3}, \text{PAGE-4+}\}$$
 with initial condition $S_1 = \text{START}$ unconditionally.
 
 | Metric | Target | Operational Rationale |
 | :--- | :--- | :--- |
-| **Boundary Recall ($R_B$)** | $\ge 98.5\%$ | Prevents missed splits (which create chimera candidates). |
-| **Boundary Precision ($P_B$)** | $\ge 97.0\%$ | Prevents over-splitting multi-page CVs into orphaned single pages. |
-| **Clean Document Accuracy** | $\ge 96.0\%$ | Percentage of candidates completely segmented with zero error. |
+| **Boundary Recall ($R_B$)** | $\ge 98.5$% | Prevents missed splits (which create chimera candidates). |
+| **Boundary Precision ($P_B$)** | $\ge 97.0$% | Prevents over-splitting multi-page CVs into orphaned single pages. |
+| **Clean Document Accuracy** | $\ge 96.0$% | Percentage of candidates completely segmented with zero error. |
 | **Latency** | $< 15\text{ ms / page}$ | A 500-page batch processes in under 8 seconds on standard CPU. |
 | **Hardware Requirement** | 100% Multi-core CPU | Zero GPU required for v1.0. Container footprint $<350\text{ MB}$. |
 
@@ -128,7 +133,7 @@ Running Optical Character Recognition (OCR) blindly on a 500-page PDF turns a 7-
 $$\rho_{\text{text}} = \frac{\text{Character Count}}{\text{Page Width} \times \text{Page Height}}$$
 
 * If $\text{CharCount} \ge 80$: The page is certified as `DIGITAL`. OCR is completely bypassed.
-* If $\text{CharCount} < 80$ AND the page contains embedded raster images (`/XObject /Subtype /Image` covering $>50\%$ of page area): The page is certified as `SCANNED`. Only this individual page is passed to `PaddleOCR` or `Tesseract` to generate synthetic `TextSpan` bounding boxes.
+* If $\text{CharCount} < 80$ AND the page contains embedded raster images (`/XObject /Subtype /Image` covering over 50% of page area): The page is certified as `SCANNED`. Only this individual page is passed to `PaddleOCR` or `Tesseract` to generate synthetic `TextSpan` bounding boxes.
 
 ---
 
@@ -144,7 +149,10 @@ $$\rho_{\text{text}} = \frac{\text{Character Count}}{\text{Page Width} \times \t
 #### 2. Typography Dominance Ratio ($R_{\text{font}}$)
 * **Scientific Basis:** The candidate's name is the typographic anchor of a resume. Designers style it with the highest point size in the document ($22\text{pt} - 32\text{pt}$), whereas section titles use $13\text{pt} - 16\text{pt}$ and body text uses $10\text{pt} - 11\text{pt}$.
 * **Mathematical Formulation:**
-  $$R_{\text{font}}(P_k) = \frac{\max_{s \in \text{top } 25\%(P_k)} \text{FontSize}(s)}{\text{median}_{s \in P_k} \text{FontSize}(s)}$$
+  $$
+  R_{\text{font}}(P_k) = \frac{\max_{s \in \text{TopQuarter}(P_k)} \text{FontSize}(s)}{\text{median}_{s \in P_k} \text{FontSize}(s)}
+  $$
+  where $\text{TopQuarter}(P_k)$ contains all text spans in the top 25% vertical zone of page $P_k$.
   * A sudden spike where $R_{\text{font}}(P_{i+1}) \ge 1.8$ while $R_{\text{font}}(P_i) < 1.3$ strongly indicates the top of a new candidate document.
 
 #### 3. Explicit Header/Footer Pagination Tracking
@@ -190,14 +198,21 @@ Every local classifier (Heuristics, LightGBM, ViT) evaluates adjacent pages $(P_
 
 #### The Hidden Markov Model (HMM) Solution
 We model the stream as a linear Markov process with 4 hidden states:
-$$S_t \in \{\text{START}, \text{PAGE\_2}, \text{PAGE\_3}, \text{PAGE\_4+}\}$$
+$$S_t \in \{\text{START}, \text{PAGE-2}, \text{PAGE-3}, \text{PAGE-4+}\}$$
 
 #### Transition Matrix $\mathbf{A}$:
 Each entry $A_{j, k} = P(S_t = k \mid S_{t-1} = j)$ represents the probability of transitioning from state $j$ to state $k$:
 
-$$A = \begin{pmatrix} 0.45 & 0.42 & 0.10 & 0.03 \\\\ 0.70 & 0.00 & 0.25 & 0.05 \\\\ 0.85 & 0.00 & 0.00 & 0.15 \\\\ 0.92 & 0.00 & 0.00 & 0.08 \end{pmatrix}$$
+$$
+\mathbf{A} = \begin{pmatrix}
+0.45 & 0.42 & 0.10 & 0.03 \\
+0.70 & 0.00 & 0.25 & 0.05 \\
+0.85 & 0.00 & 0.00 & 0.15 \\
+0.92 & 0.00 & 0.00 & 0.08
+\end{pmatrix}
+$$
 
-* Note: Transitions like $\text{START} \to \text{PAGE\_3}$ or $\text{PAGE\_2} \to \text{PAGE\_2}$ have probability $0.00$. This mathematically eliminates illegal structural sequences!
+* Note: Transitions like $\text{START} \to \text{PAGE-3}$ or $\text{PAGE-2} \to \text{PAGE-2}$ have probability $0.00$. This mathematically eliminates illegal structural sequences!
 
 #### Viterbi Dynamic Programming Algorithm
 The optimal global state sequence $\mathbf{S}^* = [S_1^*, S_2^*, \dots, S_N^*]$ maximizes the joint probability:
@@ -319,7 +334,7 @@ feat/eng2-heuristics-features ────────────────�
 1. **Quality Gates Required to Merge:**
    - Automated Linter (`ruff check .`) and Formatter (`ruff format --check .`) pass with 0 errors.
    - Strict static type analysis (`mypy src/`) passes with 0 issues.
-   - Test suite passes with coverage $\ge 70\%$ (`pytest tests/`).
+   - Test suite passes with coverage $\ge 70$% (`pytest tests/`).
    - At least 1 peer approval from another engineer.
    - Merges must use **Squash and Merge** to maintain a linear git history on `main`.
 2. **Branch-Specific Ephemeral Docker Images:**

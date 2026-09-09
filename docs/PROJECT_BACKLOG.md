@@ -24,7 +24,7 @@ A backlog item is ready for sprint planning if:
 A story is considered complete when:
 1. Code is implemented with strict static type hints (`mypy src/ --strict`).
 2. Unit and integration tests are written and passing (`pytest tests/`).
-3. Code coverage is maintained $\ge 70\%$ (progressing to $\ge 85\%$).
+3. Code coverage is maintained $\ge 70$% (progressing to $\ge 85$%).
 4. Code passes linter and formatter (`ruff check .` and `ruff format --check .`).
 5. PR is reviewed, approved by at least 1 peer, and merged into `main`.
 
@@ -60,7 +60,7 @@ A story is considered complete when:
 * **User Persona:** As a system administrator, I want OCR to be triggered strictly on scanned or flatbed resume pages so that processing digital PDFs does not suffer heavy OCR latency penalties.
 * **Acceptance Criteria:**
   - Evaluates text character density threshold ($\text{chars} < 80$ AND has embedded raster image).
-  - Skips OCR on born-digital pages ($\ge 95\%$ of stream).
+  - Skips OCR on born-digital pages ($\ge 95$% of stream).
   - Routes scanned pages to `PaddleOCR` / `Tesseract` to populate synthetic `TextSpan` objects.
 * **Story Points:** 3  
 * **Priority:** P1  
@@ -98,7 +98,7 @@ A story is considered complete when:
 * **User Persona:** As a boundary detector, I want to identify candidate contact credentials in page headers so that new candidate start pages are recognized with high confidence.
 * **Acceptance Criteria:**
   - Extracts email (`EMAIL_REGEX`), international phone (`phonenumbers`), LinkedIn, and GitHub links in the top 35% vertical zone of each page.
-  - Returns weighted score $S_{\text{PII}}$. When $S_{\text{PII}} \ge 3.0$, emits high boundary confidence ($P \ge 0.98$).
+  - Returns weighted score $S_{PII}$. When $S_{PII} \ge 3.0$, emits high boundary confidence ($P \ge 0.98$).
 * **Story Points:** 3  
 * **Priority:** P0  
 * **Assignee:** Engineer 2  
@@ -106,8 +106,8 @@ A story is considered complete when:
 #### Story 3.2: Typography Hierarchy & Dominance Ratio Analyzer
 * **User Persona:** As a boundary detector, I want to detect prominent candidate name titles so that typographic hierarchy discontinuities indicate candidate transitions.
 * **Acceptance Criteria:**
-  - Computes Dominance Ratio $R_{\text{font}} = \max(\text{top } 25\%) / \text{median}(\text{all spans})$.
-  - Detects spikes where $R_{\text{font}}(P_{i+1}) \ge 1.8$ and $R_{\text{font}}(P_i) < 1.3$.
+  - Computes Dominance Ratio $R_{font} = \max(\text{TopQuarter}) / \text{median}(\text{all spans})$.
+  - Detects spikes where $R_{font}(P_{i+1}) \ge 1.8$ and $R_{font}(P_i) < 1.3$.
 * **Story Points:** 2  
 * **Priority:** P1  
 * **Assignee:** Engineer 2  
@@ -136,18 +136,18 @@ A story is considered complete when:
 
 ### EPIC-4: 36-Dimensional Feature Engineering & LightGBM (Tier 2)
 
-#### Story 4.1: Pairwise Tabular Feature Vector Extractor
-* **User Persona:** As an ML classifier, I need a normalized 36-dimensional feature vector comparing adjacent pages $(P_i, P_{i+1})$ across semantic, PII, typography, syntactic, and lifecycle signals.
+#### Story 4.1: Pairwise Tabular Feature Extractor
+* **User Persona:** As an ML classifier, I need a normalized 36-dimensional feature vector comparing adjacent pages $(P_i, P_{i+1})$ so that gradient-boosted trees can resolve ambiguous layouts in 2 ms on CPU.
 * **Acceptance Criteria:**
-  - `PairwiseFeatureExtractor.extract_features()` produces a dictionary of 36 float features.
-  - Handles edge cases (empty pages, non-Latin text, missing bounding boxes) with safe fallbacks.
-  - Feature extraction completes in $<2$ ms per adjacent page pair on CPU.
+  - `PairwiseFeatureExtractor.extract_features()` produces a 36-feature dictionary spanning semantic, PII, typography, layout delta, syntactic, and lifecycle signals.
+  - Zero crashes on empty text, single-column, or multi-column layouts.
+  - Execution speed is $<2$ ms per page pair on standard CPU.
 * **Story Points:** 5  
 * **Priority:** P0  
 * **Assignee:** Engineer 2 & 3  
 
 #### Story 4.2: LightGBM Pairwise Classifier Training & Tuning
-* **User Persona:** As an ML engineer, I want to train a LightGBM binary classifier on 50,000 synthetic page transitions so that ambiguous layouts are resolved with $>96\%$ F1 accuracy.
+* **User Persona:** As an ML engineer, I want to train a LightGBM binary classifier on 50,000 synthetic page transitions so that ambiguous layouts are resolved with $>96$% F1 accuracy.
 * **Acceptance Criteria:**
   - Trains gradient-boosted decision trees using histogram binning and GOSS.
   - Hyperparameters optimized via Optuna (`max_depth=5`, `num_leaves=31`, `n_estimators=150`).
@@ -162,10 +162,10 @@ A story is considered complete when:
 ### EPIC-5: Structured Sequence Modeling & Viterbi Trellis (Tier 3)
 
 #### Story 5.1: Hidden Markov Model Transition Priors Formulation
-* **User Persona:** As a sequence decoder, I need empirical state transition probabilities $P(S_t \mid S_{t-1})$ over states $\{\text{START}, \text{PAGE\_2}, \text{PAGE\_3}, \text{PAGE\_4+}\}$ so that real-world resume length distributions are strictly enforced.
+* **User Persona:** As a sequence decoder, I need empirical state transition probabilities $P(S_t \mid S_{t-1})$ over states $\{\text{START}, \text{PAGE-2}, \text{PAGE-3}, \text{PAGE-4+}\}$ so that real-world resume length distributions are strictly enforced.
 * **Acceptance Criteria:**
   - Implements state transition matrix $\mathbf{A}$ derived from real candidate distribution statistics.
-  - Enforces structural impossibility constraints: $P(\text{START} \to \text{PAGE\_3}) = 0.00$.
+  - Enforces structural impossibility constraints: $P(\text{START} \to \text{PAGE-3}) = 0.00$.
   - Eliminates orphaned continuation pages.
 * **Story Points:** 3  
 * **Priority:** P0  
