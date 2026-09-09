@@ -22,7 +22,7 @@ RUN uv pip install --system --no-cache-dir .
 # Stage 2: Minimal Production Runtime
 FROM python:3.11-slim AS runtime
 
-LABEL org.opencontainers.image.source="https://github.com/placeholder-org/cv-stream-segmenter"
+LABEL org.opencontainers.image.source="https://github.com/khilo619/CV-Segmentation"
 LABEL org.opencontainers.image.description="CV Stream Segmentation Engine"
 
 WORKDIR /app

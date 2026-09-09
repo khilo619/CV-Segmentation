@@ -1,7 +1,7 @@
 # CV Stream Segmentation Engine
 
-[![CI Pipeline](https://github.com/placeholder-org/cv-stream-segmenter/actions/workflows/ci.yml/badge.svg)](https://github.com/placeholder-org/cv-stream-segmenter/actions)
-[![Docker Image](https://img.shields.io/badge/GHCR-Docker%20Image-blue)](https://github.com/placeholder-org/cv-stream-segmenter/pkgs/container/cv-stream-segmenter)
+[![CI Pipeline](https://github.com/khilo619/CV-Segmentation/actions/workflows/ci.yml/badge.svg)](https://github.com/khilo619/CV-Segmentation/actions)
+[![Docker Image](https://img.shields.io/badge/GHCR-Docker%20Image-blue)](https://github.com/khilo619/CV-Segmentation/pkgs/container/CV-Segmentation)
 [![Python 3.11](https://img.shields.io/badge/Python-3.11-brightgreen.svg)](https://python.org)
 [![License: Proprietary / Enterprise](https://img.shields.io/badge/License-Proprietary-red.svg)]()
 
