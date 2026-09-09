@@ -9,7 +9,6 @@ env/
 venv/
 .git
 .github
-.gitignore
 .pytest_cache
 .ruff_cache
 .mypy_cache

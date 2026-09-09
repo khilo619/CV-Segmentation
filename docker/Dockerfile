@@ -14,8 +14,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN pip install --no-cache-dir uv
 
-COPY pyproject.toml .
-# Install production dependencies into a virtualenv or system site-packages
+COPY pyproject.toml README.md ./
+COPY src/ ./src/
 RUN uv pip install --system --no-cache-dir .
 
 # Stage 2: Minimal Production Runtime
@@ -39,7 +39,7 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 # Copy application source code and configs
 COPY src/ /app/src/
 COPY configs/ /app/configs/
-COPY pyproject.toml /app/
+COPY pyproject.toml README.md /app/
 
 # Install the app itself in editable mode without re-downloading dependencies
 RUN pip install --no-deps -e /app
