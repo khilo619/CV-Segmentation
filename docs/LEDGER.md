@@ -215,8 +215,11 @@ $$
 * Note: Transitions like $\text{START} \to \text{PAGE-3}$ or $\text{PAGE-2} \to \text{PAGE-2}$ have probability $0.00$. This mathematically eliminates illegal structural sequences!
 
 #### Viterbi Dynamic Programming Algorithm
-The optimal global state sequence $\mathbf{S}^* = [S_1^*, S_2^*, \dots, S_N^*]$ maximizes the joint probability:
-$$\mathbf{S}^* = \arg\max_{\mathbf{S}} \sum_{t=1}^N \left( \log P(O_t \mid S_t) + \log P(S_t \mid S_{t-1}) \right)$$
+The optimal global state sequence $\mathbf{S}^\ast = [S_1^\ast, S_2^\ast, \dots, S_N^\ast]$ maximizes the joint probability:
+
+$$
+\mathbf{S}^\ast = \arg\max_{\mathbf{S}} \sum_{t=1}^N \left( \log P(O_t \mid S_t) + \log P(S_t \mid S_{t-1}) \right)
+$$
 
 1. **Initialization:**
    $$V[1, \text{START}] = 0.0, \quad V[1, s] = -\infty \quad (\forall s \neq \text{START})$$
@@ -225,7 +228,7 @@ $$\mathbf{S}^* = \arg\max_{\mathbf{S}} \sum_{t=1}^N \left( \log P(O_t \mid S_t) 
    $$\text{Backpointer}[t, k] = \arg\max_{j} \left( V[t-1, j] + \log A_{j, k} \right)$$
    where $\log B_k(O_t)$ is the emission log-likelihood derived from LightGBM / Heuristic split probabilities.
 3. **Backtracking:**
-   Traces back from $\arg\max_k V[N, k]$ to recover the globally optimal state sequence $\mathbf{S}^*$. Boundaries are emitted wherever $S_t^* = \text{START}$ for $t > 1$.
+   Traces back from $\arg\max_k V[N, k]$ to recover the globally optimal state sequence $\mathbf{S}^\ast$. Boundaries are emitted wherever $S_t^\ast = \text{START}$ for $t > 1$.
 * **Execution Time:** Running Viterbi dynamic programming on a 500-page document takes **0.002 milliseconds** on CPU.
 
 ---
