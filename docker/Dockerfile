@@ -44,6 +44,9 @@ COPY pyproject.toml README.md /app/
 # Install the app itself in editable mode without re-downloading dependencies
 RUN pip install --no-deps -e /app
 
+# Create output directory and grant ownership to non-root user
+RUN mkdir -p /app/output_candidates && chown -R 10001:10001 /app
+
 # Run as non-root user for enterprise container security
 USER 10001:10001
 

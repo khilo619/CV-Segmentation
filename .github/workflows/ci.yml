@@ -6,6 +6,10 @@ on:
   push:
     branches: [ main ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   lint-and-typecheck:
     name: Lint & Static Type Analysis
@@ -22,7 +26,8 @@ jobs:
       - name: Install Development Tools
         run: |
           python -m pip install --upgrade pip
-          pip install ruff mypy types-PyYAML
+          pip install uv
+          uv pip install --system -e ".[dev]"
 
       - name: Run Ruff Lint Check
         run: ruff check .

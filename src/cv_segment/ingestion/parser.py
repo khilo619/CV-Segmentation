@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Union
 
 try:
-    import fitz  # PyMuPDF
+    import pymupdf as fitz
 except ImportError:
     fitz = None  # type: ignore[assignment]
 
@@ -32,7 +32,8 @@ class PDFStreamParser:
         doc = fitz.open(str(path_obj))
         pages: list[PagePayload] = []
 
-        for idx, page in enumerate(doc):
+        for idx in range(len(doc)):
+            page = doc[idx]
             rect = page.rect
             text = page.get_text("text") or ""
             char_count = len(text.strip())
