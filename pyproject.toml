@@ -1,0 +1,79 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cv-segment"
+version = "1.0.0"
+description = "High-throughput boundary detection and lossless splitting engine for bulk resume streams."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    { name = "AI Document Architecture Team" }
+]
+dependencies = [
+    "PyMuPDF>=1.23.0",
+    "pikepdf>=8.0.0",
+    "lightgbm>=4.0.0",
+    "numpy>=1.24.0",
+    "scikit-learn>=1.3.0",
+    "pydantic>=2.0.0",
+    "pyyaml>=6.0",
+    "phonenumbers>=8.13.0",
+    "fastapi>=0.100.0",
+    "uvicorn[standard]>=0.23.0",
+    "python-multipart>=0.0.6",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.1.0",
+    "mypy>=1.5.0",
+    "types-PyYAML>=6.0.0",
+]
+ocr = [
+    "paddlepaddle>=2.5.0",
+    "paddleocr>=2.7.0",
+    "pytesseract>=0.3.10",
+]
+
+[project.scripts]
+cv-segment = "cv_segment.pipeline:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "C",   # flake8-comprehensions
+    "B",   # flake8-bugbear
+]
+ignore = ["B008"]
+
+[tool.ruff.isort]
+known-first-party = ["cv_segment"]
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --cov=cv_segment --cov-report=term-missing"
+testpaths = [
+    "tests",
+]
+pythonpath = ["src"]

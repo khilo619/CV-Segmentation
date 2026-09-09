@@ -1,0 +1,34 @@
+# Hidden Markov Model Prior Transition Matrix & States
+
+states:
+  - "START"
+  - "PAGE_2"
+  - "PAGE_3"
+  - "PAGE_4_PLUS"
+
+# Transition probabilities A[i, j] representing P(State_t = j | State_{t-1} = i)
+# Order: [START, PAGE_2, PAGE_3, PAGE_4_PLUS]
+transition_matrix:
+  START:
+    START: 0.45      # 1-page CV followed by new CV
+    PAGE_2: 0.42     # Continuation to page 2
+    PAGE_3: 0.00     # Mathematically impossible (structural constraint)
+    PAGE_4_PLUS: 0.00 # Mathematically impossible
+
+  PAGE_2:
+    START: 0.70      # 2-page CV finishes, new CV starts
+    PAGE_2: 0.00     # Cannot transition to page 2 from page 2
+    PAGE_3: 0.25     # Continues to page 3
+    PAGE_4_PLUS: 0.00 # Cannot skip page 3
+
+  PAGE_3:
+    START: 0.85      # 3-page CV finishes, new CV starts
+    PAGE_2: 0.00
+    PAGE_3: 0.00
+    PAGE_4_PLUS: 0.15 # Continues to page 4+
+
+  PAGE_4_PLUS:
+    START: 0.92      # 4+ page CV finishes
+    PAGE_2: 0.00
+    PAGE_3: 0.00
+    PAGE_4_PLUS: 0.08 # Continues beyond page 4

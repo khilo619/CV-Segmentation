@@ -1,0 +1,54 @@
+# LightGBM Pairwise Classifier Hyperparameters & Feature Configuration
+
+model_params:
+  objective: "binary"
+  metric: "binary_logloss"
+  boosting_type: "gbdt"
+  n_estimators: 150
+  learning_rate: 0.05
+  num_leaves: 31
+  max_depth: 5
+  min_child_samples: 20
+  subsample: 0.8
+  colsample_bytree: 0.8
+  random_state: 42
+  n_jobs: -1
+  verbose: -1
+
+feature_columns:
+  - "tfidf_cosine_sim"
+  - "token_jaccard_sim"
+  - "name_levenshtein_ratio"
+  - "shared_org_count"
+  - "shared_url_domain_count"
+  - "shared_email_domain_flag"
+  - "delta_pii_score"
+  - "email_present_p2"
+  - "phone_present_p2"
+  - "name_present_p2"
+  - "address_match_score"
+  - "delta_link_count"
+  - "delta_font_dominance"
+  - "delta_max_font_size"
+  - "delta_median_font_size"
+  - "delta_left_margin"
+  - "delta_top_margin"
+  - "delta_line_spacing"
+  - "delta_text_block_count"
+  - "delta_column_count"
+  - "delta_aspect_ratio"
+  - "delta_blank_line_count"
+  - "flag_trailing_hyphen_p1"
+  - "flag_lack_terminal_period_p1"
+  - "flag_conjunction_ending_p1"
+  - "flag_initial_lowercase_p2"
+  - "flag_bullet_continuation"
+  - "flag_numbered_list_increment"
+  - "flag_table_row_continuation"
+  - "flag_header_entity_match"
+  - "terminal_section_score_p1"
+  - "front_section_score_p2"
+  - "cumulative_page_count"
+  - "pagination_gap_flag"
+  - "exact_page_increment_flag"
+  - "total_pagination_mismatch_flag"

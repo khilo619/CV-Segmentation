@@ -1,0 +1,29 @@
+# Heuristic Rule Engine Configurations
+
+pii:
+  header_zone_ratio: 0.35 # Top 35% of page vertical coordinates
+  weights:
+    email: 2.0
+    phone: 1.5
+    linkedin: 1.0
+    github: 1.0
+  threshold_split: 3.0 # Score >= 3.0 strongly indicates a new CV start
+
+typography:
+  header_zone_ratio: 0.25 # Top 25% of page
+  dominance_ratio_threshold: 1.8 # max_font_top / median_font
+  split_delta_threshold: 0.5
+
+pagination:
+  margin_zone_ratio: 0.10 # Top/bottom 10% header/footer search space
+  explicit_patterns:
+    - '(?i)page\s*(\d+)\s*(?:of|/)\s*(\d+)'
+    - '(?i)^\s*[-–—]?\s*(\d+)\s*[-–—]?\s*$'
+
+syntactic:
+  terminal_punctuation: [".", "!", "?", ":"]
+  continuation_conjunctions: ["and", "or", "with", "including", "such as", "to", "for"]
+
+gating:
+  confident_split_threshold: 0.98
+  confident_continuation_threshold: 0.02
